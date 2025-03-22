@@ -37,10 +37,10 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
           const fs = require('fs');
-          const path = './card.svg';  // Ensure this is the correct path
+          const path = './card.svg';
           const content = fs.readFileSync(path, { encoding: 'base64' });
-          const owner = process.env.GITHUB_ACTOR;  // GitHub username (owner of the repo)
-          const repo = process.env.GITHUB_REPOSITORY.split('/')[1];  // Repository name
+          const owner = process.env.GITHUB_ACTOR;
+          const repo = process.env.GITHUB_REPOSITORY.split('/')[1];
           const filePath = 'card.svg';
           await github.rest.repos.createOrUpdateFileContents({
             owner,
@@ -56,4 +56,4 @@ jobs:
 
     - name: Generate Camo URL
       run: |
-        echo "https://camo.githubusercontent.com/${GITHUB_SHA}/${GITHUB_ACTOR}/${GITHUB_REPOSITORY}/main/assets/card.svg"
+        echo "https://raw.githubusercontent.com/${GITHUB_ACTOR}/${GITHUB_REPOSITORY}/refs/heads/main/card.svg"
