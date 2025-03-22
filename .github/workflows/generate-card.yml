@@ -54,6 +54,7 @@ jobs:
             }
           });
 
+
     - name: Generate Camo URL
       run: |
         echo "https://raw.githubusercontent.com/${GITHUB_ACTOR}/${GITHUB_REPOSITORY}/refs/heads/main/card.svg"
