@@ -1,0 +1,44 @@
+name: Generate Card
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  generate-image:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.9'
+
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+
+    - name: Generate card image
+      run: |
+        # Make sure the OC_TOKEN environment variable is available
+        export OC_TOKEN=${{ secrets.OC_TOKEN }}
+        python gen.py
+
+    - name: Upload image as artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: generated-card
+        path: ./card.svg
+
+    - name: Upload to GitHub Release
+      if: success()
+      run: |
+        RELEASE_TAG=$(git describe --tags --abbrev=0)
+        gh release upload $RELEASE_TAG ./card.svg --clobber
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
