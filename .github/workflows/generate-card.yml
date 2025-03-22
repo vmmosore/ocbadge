@@ -40,7 +40,7 @@ jobs:
           const owner = process.env.GITHUB_ACTOR;  // GitHub username (owner of the repo)
           const repo = process.env.GITHUB_REPOSITORY.split('/')[1];  // Repository name
           const filePath = 'card.svg';
-          await github.repos.createOrUpdateFileContents({
+          await github.rest.repos.createOrUpdateFileContents({
             owner,
             repo,
             path: filePath,
