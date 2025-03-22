@@ -29,20 +29,32 @@ jobs:
         export OC_TOKEN=${{ secrets.OC_TOKEN }}
         python gen.py
     
-    - name: Set RELEASE_TAG
-      id: release_tag
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Upload SVG to GitHub Repo
+      uses: actions/github-script@v5
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const fs = require('fs');
+          const path = './card.svg';
+          const content = fs.readFileSync(path, { encoding: 'base64' });
+          const owner = process.env.GITHUB_ACTOR;  // GitHub username (owner of the repo)
+          const repo = process.env.GITHUB_REPOSITORY.split('/')[1];  // Repository name
+          const filePath = 'card.svg';
+          await github.repos.createOrUpdateFileContents({
+            owner,
+            repo,
+            path: filePath,
+            message: 'Upload SVG Card',
+            content,
+            committer: {
+              name: 'GitHub Actions',
+              email: 'actions@github.com'
+            }
+          });
+
+    - name: Generate Camo URL
       run: |
-        RELEASE_TAG=$(git describe --tags --abbrev=0 || echo "latest")
-        echo "RELEASE_TAG=$RELEASE_TAG" >> $GITHUB_ENV
-    
-    - name: Create GitHub Release
-      run: |
-        gh release view ${{ env.RELEASE_TAG }} || gh release create ${{ env.RELEASE_TAG }} --title "Release ${{ env.RELEASE_TAG }}" --notes "Release notes for ${{ env.RELEASE_TAG }}"
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    
-    - name: Upload to GitHub Release
-      run: |
-        gh release upload ${{ env.RELEASE_TAG }} ./card.svg --clobber
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        echo "https://camo.githubusercontent.com/${GITHUB_SHA}/${GITHUB_ACTOR}/${GITHUB_REPOSITORY}/main/assets/card.svg"
