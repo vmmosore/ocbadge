@@ -35,7 +35,7 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
           const fs = require('fs');
-          const path = './card.svg';  # Ensure this is the correct path
+          const path = './card.svg';  // Ensure this is the correct path
           const content = fs.readFileSync(path, { encoding: 'base64' });
           const owner = process.env.GITHUB_ACTOR;  // GitHub username (owner of the repo)
           const repo = process.env.GITHUB_REPOSITORY.split('/')[1];  // Repository name
