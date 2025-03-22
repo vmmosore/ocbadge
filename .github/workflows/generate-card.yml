@@ -1,3 +1,22 @@
+- name: Generate card image
+  run: |
+    # Make sure the OC_TOKEN environment variable is available
+    export OC_TOKEN=${{ secrets.OC_TOKEN }}
+    python gen.py
+
+- name: Set RELEASE_TAG
+  id: release_tag
+  run: |
+    # Attempt to get the latest tag
+    RELEASE_TAG=$(git describe --tags --abbrev=0 || echo "latest")
+    echo "RELEASE_TAG=$RELEASE_TAG" >> $GITHUB_ENV
+
+- name: Upload to GitHub Release
+  if: success()
+  run: |
+    gh release upload ${{ env.RELEASE_TAG }} ./card.svg --clobber
+  env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 name: Generate Card
 
 on:
@@ -28,17 +47,18 @@ jobs:
         # Make sure the OC_TOKEN environment variable is available
         export OC_TOKEN=${{ secrets.OC_TOKEN }}
         python gen.py
-
-    - name: Upload image as artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: generated-card
-        path: ./card.svg
-
+    
+    - name: Set RELEASE_TAG
+      id: release_tag
+      run: |
+        # Attempt to get the latest tag
+        RELEASE_TAG=$(git describe --tags --abbrev=0 || echo "latest")
+        echo "RELEASE_TAG=$RELEASE_TAG" >> $GITHUB_ENV
+    
     - name: Upload to GitHub Release
       if: success()
       run: |
-        RELEASE_TAG=$(git describe --tags --abbrev=0)
-        gh release upload $RELEASE_TAG ./card.svg --clobber
+        gh release upload ${{ env.RELEASE_TAG }} ./card.svg --clobber
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
