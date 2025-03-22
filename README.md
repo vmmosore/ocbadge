@@ -1,0 +1,29 @@
+# Olicyber Badge Generator
+
+A github workflow to generate cards like this:
+
+![My Card](./card.svg)
+
+# How To
+## Auth Token
+Go to the [Training Platform](training.olicyber.it), login. Then use the dev-tools to view the local storage and get your token.
+
+![DevTools](https://raw.githubusercontent.com/utcq/oca/refs/heads/main/assets/devtools.png)
+![Token](https://raw.githubusercontent.com/utcq/oca/refs/heads/main/assets/token.png)
+
+## Repo setup
+Fork the repo, then go to **Settings -> Secrets and variables -> Actions**
+
+Create a new secret named `OC_TOKEN` and insert the previously retrieved token
+
+## Trigger generation
+Proceed to **Actions -> Generate Card (on the left) -> Run workflow**
+
+![Screen](data/actions.png)
+
+## Embedding
+You now have to insert
+```html
+<img src="https://raw.githubusercontent.com/USER/ocbadge/main/card.svg"/>
+```
+in your github profile README
