@@ -2,7 +2,7 @@ import requests, os
 import badge
 
 TOKEN = os.getenv("OC_TOKEN")
-try: assert TOKEN.count("-") == 4 && len(TOKEN) == 36
+try: assert TOKEN.count("-") == 4 and len(TOKEN) == 36
 except: raise ValueError("Invalid token format")
 
 PLAYER_URL = "https://training.olicyber.it/api/scoreboard/player"
