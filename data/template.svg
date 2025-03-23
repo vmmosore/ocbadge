@@ -57,5 +57,7 @@
   <text x="48%" y="165" text-anchor="middle" font-size="20" font-family="Poppins, sans-serif" font-weight="bold" fill="#8432e1" filter="url(#neon)">
     {scoreboard_position}°
   </text>
+
+  <text x="48%" y="188" text-anchor="middle" font-size="12" font-family="monospace, sans-serif" fill="#6f2fb7" opacity="60%">training.olicyber.it</text>
 </svg>
 
