@@ -29,7 +29,7 @@
   </svg>
   <text x="25%" y="85" text-anchor="middle" font-size="14" font-family="Poppins, sans-serif" fill="#6f2fb7">Score</text>
   <text x="25%" y="105" text-anchor="middle" font-size="18" font-family="Poppins, sans-serif" font-weight="bold" fill="#8432e1" filter="url(#neon)">
-    116109
+    116609
   </text>
 
   <!-- Solved Challenges -->
@@ -38,7 +38,7 @@
   </svg>
   <text x="48%" y="85" text-anchor="middle" font-size="14" font-family="Poppins, sans-serif" fill="#6f2fb7">Solved</text>
   <text x="48%" y="105" text-anchor="middle" font-size="18" font-family="Poppins, sans-serif" font-weight="bold" fill="#8432e1" filter="url(#neon)">
-    240
+    241
   </text>
 
   <!-- Best Category -->
@@ -55,7 +55,7 @@
   </svg>
   <text x="48%" y="145" text-anchor="middle" font-size="14" font-family="Poppins, sans-serif" fill="#6f2fb7">Ranking</text>
   <text x="48%" y="165" text-anchor="middle" font-size="20" font-family="Poppins, sans-serif" font-weight="bold" fill="#8432e1" filter="url(#neon)">
-    68°
+    66°
   </text>
 
   <text x="48%" y="188" text-anchor="middle" font-size="12" font-family="monospace, sans-serif" fill="#6f2fb7" opacity="60%">training.olicyber.it</text>
