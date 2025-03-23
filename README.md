@@ -20,9 +20,12 @@ Go to the [Training Platform](training.olicyber.it), login. Then use the dev-too
 - [Local Generation](#local-generation)
 
 ## Automated workflow
-Fork the repo, then go to **Settings -> Secrets and variables -> Actions**
+After forking the repo
 
-Create a new secret named `OC_TOKEN` and insert the previously retrieved token
+> [!IMPORTANT]  
+> go to **Settings -> Secrets and variables -> Actions**
+>
+> Create a new secret named `OC_TOKEN` and insert the previously retrieved token
 
 ### Manual Update Trigger
 The card is updated everyday at midnight (`UTC+1`) but you can update it manually:
