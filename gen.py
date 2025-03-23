@@ -57,7 +57,7 @@ def make_card(data, template="default"):
 
 template_style = "default"
 
-if len(sys.argv) > 1 and sys.argv[1] in ["default", "dark", "white","darkRed"]:
+if len(sys.argv) > 1 and sys.argv[1] in ["default", "dark", "white","darkRed","darkBlue"]:
     template_style = sys.argv[1]
 
 
