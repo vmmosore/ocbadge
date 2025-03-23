@@ -2,25 +2,19 @@ import requests, os
 from collections import defaultdict
 import base64
 import sys
+import json
 
 TOKEN = os.getenv("OC_TOKEN")
-try:
-    assert TOKEN.count("-") == 4 and len(TOKEN) == 36
-except:
-    raise ValueError("Invalid token format")
+if TOKEN is None:
+    raise ValueError("TOKEN environment variable not set")
+
+headers = {"Authorization": f"Token {TOKEN}"}
 
 PLAYER_URL = "https://training.olicyber.it/api/scoreboard/player"
 SCOREBOARD_URL = "https://training.olicyber.it/api/scoreboard"
 
-if TOKEN is None:
-    raise ValueError("TOKEN environment variable not set")
-
-headers = {
-    "Authorization": f"Token {TOKEN}",
-}
-
 def resolve_fullname(player_data) -> str:
-    return player_data["name"] + " " + player_data["surname"] + " (" + player_data["nickname"] + ")"
+    return f'{player_data["name"]} {player_data["surname"]} ({player_data["nickname"]})'
 
 def find_scoreboard_position(player_data) -> int:
     display_name = resolve_fullname(player_data)
@@ -40,6 +34,10 @@ useful_data = {
     "best_category": find_best_category(user_data),
 }
 
+# Salva i dati in JSON
+with open("player_data.json", "w") as json_file:
+    json.dump(useful_data, json_file, indent=4)
+
 def make_card(data, template="default"):
     try: 
         logo = open("data/logo.svg", 'r').read()
@@ -54,12 +52,13 @@ def make_card(data, template="default"):
     except Exception as e:
         raise ValueError(f"{template_filename} not found, or invalid: {str(e)}")
 
-
+# Seleziona il template
 template_style = "default"
-
-if len(sys.argv) > 1 and sys.argv[1] in ["default", "dark", "white","darkRed","darkBlue"]:
+if len(sys.argv) > 1 and sys.argv[1] in ["default", "dark", "white", "darkRed", "darkBlue"]:
     template_style = sys.argv[1]
 
-
+# Genera il file SVG
 with open("card.svg", "w") as f:
     f.write(make_card(useful_data, template_style))
+
+print("File 'card.svg' e 'player_data.json' generati con successo!")
