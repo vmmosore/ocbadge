@@ -5,6 +5,11 @@ on:
     branches:
       - main
   workflow_dispatch:
+    inputs:
+      style:
+        description: 'Card style (default, dark, white, darkRed)'
+        required: false
+        default: 'default'
   schedule:
     - cron: '23 23 * * *'
 
@@ -13,26 +18,31 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-
+    
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
-
+    
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
         python-version: '3.9'
-
+    
     - name: Install dependencies
       run: |
         pip install -r requirements.txt
-
+    
     - name: Generate card image
       run: |
         # Make sure the OC_TOKEN environment variable is available
         export OC_TOKEN=${{ secrets.OC_TOKEN }}
-        python gen.py
-
+        # Use the style parameter if provided through workflow_dispatch
+        if [ "${{ github.event_name }}" == "workflow_dispatch" ] && [ "${{ github.event.inputs.style }}" != "" ]; then
+          python gen.py ${{ github.event.inputs.style }}
+        else
+          python gen.py
+        fi
+    
     - name: Upload SVG to GitHub Repo
       uses: actions/github-script@v5
       with:
@@ -52,7 +62,7 @@ jobs:
               path: filePath
             });
             const sha = existingFile.sha;
-
+            
             await github.rest.repos.createOrUpdateFileContents({
               owner,
               repo,
@@ -78,7 +88,7 @@ jobs:
               }
             });
           }
-
+    
     - name: Generate Camo URL
       run: |
         echo "https://raw.githubusercontent.com/${GITHUB_ACTOR}/${GITHUB_REPOSITORY}/refs/heads/main/card.svg"

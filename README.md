@@ -32,7 +32,11 @@ The card is updated everyday at midnight (`UTC+1`) but you can update it manuall
 
 Proceed to **Actions -> Generate Card (on the left) -> Run workflow**
 
+When manually triggering the workflow, you can select a style from the dropdown menu:
+
 ![Screen](data/actions.png)
+
+In the workflow run form, you'll see a "Card style" input field where you can choose between `default`, `dark`, `white`, or `darkRed`.
 
 ### Embedding
 You now have to insert
@@ -40,10 +44,10 @@ You now have to insert
 <img src="https://raw.githubusercontent.com/USER/ocbadge/main/card.svg"/>
 ```
 in your github profile README
-
 ## Local Generation
 ```sh
 export OC_TOKEN=*****
-python3 gen.py
+python3 gen.py style
 ```
-The card will be saved in the execution dir as `card.svg`
+Where style is optional and can be one of: `default`, `dark`, `white`, or `darkRed`.
+The card will be saved in the execution dir as card.svg
