@@ -19,7 +19,7 @@
   <image href="data:image/svg+xml;base64,{logo}" x="8%" y="8%" width="12%" height="22%" preserveAspectRatio="xMinYMin slice"/>
 
   <!-- Username -->
-  <text x="51%" y="50" dominant-baseline="middle" text-anchor="middle" font-size="22" font-family="monospace, sans-serif" font-weight="bold" fill="#b57edc" filter="url(#neon)">
+  <text x="51%" y="45" dominant-baseline="middle" text-anchor="middle" font-size="22" font-family="monospace, sans-serif" font-weight="bold" fill="#b57edc" filter="url(#neon)">
     {username}
   </text>
 
