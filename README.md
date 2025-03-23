@@ -25,7 +25,7 @@ After forking the repo
 > [!IMPORTANT]  
 > go to **Settings -> Secrets and variables -> Actions**
 >
-> Create a new secret named `OC_TOKEN` and insert the previously retrieved token
+> Create a new **Repository** secret named `OC_TOKEN` and insert the previously retrieved token
 
 ### Manual Update Trigger
 The card is updated everyday at midnight (`UTC+1`) but you can update it manually:
