@@ -1,5 +1,6 @@
 import requests, os
-import badge
+from collections import defaultdict
+import base64
 
 TOKEN = os.getenv("OC_TOKEN")
 try: assert TOKEN.count("-") == 4 and len(TOKEN) == 36
@@ -35,6 +36,15 @@ useful_data = {
     "best_category": find_best_category(user_data),
 }
 
+def make_card(data):
+    try: logo = open("data/logo.svg", 'r').read()
+    except: raise ValueError("data/logo.svg not found")
+    
+    data["logo"] = base64.b64encode(logo.encode()).decode()
+    try: return open("data/template.svg", 'r').read().format_map(defaultdict(lambda: "N/A", data))
+    except Exception as e:
+        raise ValueError("data/template.svg not found, or invalid: " + str(e))
+
 with open("card.svg", "w") as f:
-    f.write(badge.make_card(useful_data))
+    f.write(make_card(useful_data))
 
