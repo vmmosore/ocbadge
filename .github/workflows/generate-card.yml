@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       style:
-        description: 'Card style (default, dark, white, darkRed)'
+        description: 'Card style (default, dark, white, darkRed, hacker, oldDefault)'
         required: false
         default: 'default'
   schedule:

@@ -1,7 +1,11 @@
-import requests, os
-from collections import defaultdict
+import requests
+import os
 import base64
 import sys
+import json
+from collections import defaultdict
+import io
+import matplotlib.pyplot as plt
 
 TOKEN = os.getenv("OC_TOKEN")
 try:
@@ -9,57 +13,152 @@ try:
 except:
     raise ValueError("Invalid token format")
 
+
 PLAYER_URL = "https://training.olicyber.it/api/scoreboard/player"
 SCOREBOARD_URL = "https://training.olicyber.it/api/scoreboard"
 
 if TOKEN is None:
     raise ValueError("TOKEN environment variable not set")
 
-headers = {
-    "Authorization": f"Token {TOKEN}",
+HEADERS = {
+    "Authorization": f"Token {TOKEN}"
+    }
+
+# color Palettes for Different Templates
+# first color is title color, second is text color, next 5 are for pie chart segments
+#None = No pie chart
+TEMPLATE_COLOR_PALETTES = {
+    "default": ['#6f2fb7', '#b57edc', '#8432e1', '#6f2fb7', '#a365e9', '#5a2c96', '#3d1e64'],
+    "hacker":None,
+    "dark":None,
+    "darkRed":None,
+    "white":None,
+    "oldDefault":None,
 }
 
-def resolve_fullname(player_data) -> str:
-    return player_data["name"] + " " + player_data["surname"] + " (" + player_data["nickname"] + ")"
+def resolve_fullname(player_data):
+    return f'{player_data["name"]} {player_data["surname"]} ({player_data["nickname"]})'
 
-def find_scoreboard_position(player_data) -> int:
+def find_scoreboard_position(player_data):
     display_name = resolve_fullname(player_data)
-    scoreboard = requests.get(SCOREBOARD_URL, params={"noFreeze": False}, headers=headers).json()["scoreboard"]
+    scoreboard = requests.get(SCOREBOARD_URL, params={"noFreeze": False}, headers=HEADERS).json()["scoreboard"]
     return next(i for i, player in enumerate(scoreboard) if player["displayedName"] == display_name) + 1
 
-def find_best_category(player_data) -> str:
+def find_best_category(player_data):
     categories = player_data["categories"]
     return max(categories, key=lambda category: categories[category]["solves"]).capitalize()
 
-user_data = requests.get(PLAYER_URL, headers=headers).json()
-useful_data = {
-    "scoreboard_position": find_scoreboard_position(user_data),
-    "username": user_data["nickname"],
-    "solved_challenges": user_data["correctSubmissions"],
-    "score": user_data["score"],
-    "best_category": find_best_category(user_data),
-}
-
-def make_card(data, template="default"):
-    try: 
-        logo = open("data/logo.svg", 'r').read()
-    except: 
-        raise ValueError("data/logo.svg not found")
+def generate_histogram_svg(categories, template="default"):
+    """
+    Generate a pie chart SVG representing challenge distribution across categories.
+    return : Base64 encoded SVG of the pie chart
+    """
+    if not categories:
+        return ""
     
-    data["logo"] = base64.b64encode(logo.encode()).decode()
+    palette = TEMPLATE_COLOR_PALETTES.get(template, TEMPLATE_COLOR_PALETTES["default"])
+    title_color, text_color, *chart_colors = palette
+
+    plt.figure(figsize=(6, 3), dpi=100)
+    plt.style.use('default')
+
+    plt.title("Completed Challenges", fontsize=14, color=title_color, fontweight='bold')
+
+    category_names = list(categories.keys())
+    percentages = list(categories.values())
+
+    plt.pie(
+        percentages, 
+        labels=category_names, 
+        colors=chart_colors, 
+        labeldistance=1.1,  # Aumenta la distanza delle etichette per renderle più leggibili
+        wedgeprops={
+            'edgecolor': 'black', 
+            'linewidth': 1, 
+            'antialiased': True
+        },
+        textprops={
+            'color': text_color,  
+            'fontsize': 10, 
+            'fontweight': 'bold'
+        }
+    )
+
+    buffer = io.BytesIO()
+    plt.savefig(buffer, format='svg', bbox_inches='tight', transparent=True)
+    plt.close()
+
+    svg_data = buffer.getvalue().decode('utf-8')
+    return base64.b64encode(svg_data.encode('utf-8')).decode('utf-8')
+
+
+def main():
+
+    user_data = requests.get(PLAYER_URL, headers=HEADERS).json()
+
     
-    template_filename = f"data/template_{template}.svg"
-    try: 
-        return open(template_filename, 'r').read().format_map(defaultdict(lambda: "N/A", data))
-    except Exception as e:
-        raise ValueError(f"{template_filename} not found, or invalid: {str(e)}")
+    useful_data = {
+        "scoreboard_position": find_scoreboard_position(user_data),
+        "username": user_data["nickname"],
+        "solved_challenges": user_data["correctSubmissions"],
+        "score": user_data["score"],
+        "best_category": find_best_category(user_data),
+    }
 
+    # save the data to a JSON file
+    with open("player_data.json", "w") as json_file:
+        json.dump(useful_data, json_file, indent=4)
 
-template_style = "default"
+   
+    categories = user_data["categories"]
+    category_percentages = {
+        category.capitalize(): (categories[category]["solves"] / user_data["correctSubmissions"] * 100) 
+        for category in categories
+    }
 
-if len(sys.argv) > 1 and sys.argv[1] in ["default", "dark", "white","darkRed"]:
-    template_style = sys.argv[1]
+    # generate and save player card
+    def make_card(data, template="default"):
 
+        valid_templates = list(TEMPLATE_COLOR_PALETTES.keys())
+        if template not in valid_templates:
+            raise ValueError(f"Invalid template. Available: {', '.join(valid_templates)}")
 
-with open("card.svg", "w") as f:
-    f.write(make_card(useful_data, template_style))
+        
+        try:
+            with open("data/logo.svg", 'r') as logo_file:
+                logo = logo_file.read()
+        except FileNotFoundError:
+            raise ValueError("Logo file 'data/logo.svg' not found")
+
+        
+        data["logo"] = base64.b64encode(logo.encode()).decode()
+        if TEMPLATE_COLOR_PALETTES[template]!=None:
+            histogram_base64 = generate_histogram_svg(category_percentages, template)
+            if histogram_base64:
+                data["histogram"] = f'data:image/svg+xml;base64,{histogram_base64}'
+            else:
+                data["histogram"] = "" 
+
+        
+        template_filename = f"data/template_{template}.svg"
+        try:
+            with open(template_filename, 'r') as template_file:
+                card_template = template_file.read()
+        except FileNotFoundError:
+            raise ValueError(f"Template file '{template_filename}' not found.")
+
+        # replace placeholders with data
+        card_template = card_template.format_map(defaultdict(lambda: "N/A", data))
+        return card_template
+
+    
+    template_style = sys.argv[1] if len(sys.argv) > 1 and sys.argv[1] in TEMPLATE_COLOR_PALETTES else "default"
+
+    
+    with open("card.svg", "w") as f:
+        f.write(make_card(useful_data, template_style))
+
+    
+
+if __name__ == "__main__":
+    main()
