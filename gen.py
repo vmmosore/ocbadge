@@ -33,6 +33,7 @@ TEMPLATE_COLOR_PALETTES = {
     "dark":None,
     "darkRed":None,
     "white":None,
+    "oldDefault":None,
 }
 
 def resolve_fullname(player_data):
@@ -58,12 +59,10 @@ def generate_histogram_svg(categories, template="default"):
     palette = TEMPLATE_COLOR_PALETTES.get(template, TEMPLATE_COLOR_PALETTES["default"])
     title_color, text_color, *chart_colors = palette
     
-    
-    dark_themes = ["dark", "darkRed", "darkBlue", "def4"]
-    is_dark_theme = template in dark_themes
+
     
     plt.figure(figsize=(6, 3), dpi=100)
-    plt.style.use('dark_background' if is_dark_theme else 'default')
+    plt.style.use('default')
     
     
     plt.title("Completed Challenges", fontsize=14, color=title_color, fontweight='bold')
@@ -78,7 +77,7 @@ def generate_histogram_svg(categories, template="default"):
         labels=category_names, 
         colors=chart_colors, 
         autopct='%1.1f%%', 
-        pctdistance=0.85, 
+        pctdistance=0.75, 
         wedgeprops={
             'edgecolor': 'black', 
             'linewidth': 1, 

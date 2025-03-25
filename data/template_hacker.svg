@@ -1,10 +1,9 @@
-<svg viewBox="0 0 350 200" xmlns="http://www.w3.org/2000/svg">
-  <defs>
+<svg width="350" height="200" viewBox="0 0 350 200" xmlns="http://www.w3.org/2000/svg">
+ <defs>
     <filter id="matrixGlow">
       <feDropShadow dx="0" dy="0" stdDeviation="1.5" flood-color="#00ff41"/>
     </filter>
   </defs>
-
   <!-- Background -->
   <rect width="350" height="200" rx="0" fill="#0c0c0c" stroke="#00ff41" stroke-width="2"/>
   
@@ -24,10 +23,10 @@
   <!-- Stats in terminal style -->
   <text x="20" y="90" font-family="monospace" font-size="14" fill="#00ff41">$ cat stats.json</text>
   <text x="20" y="110" font-family="monospace" font-size="14" fill="#00ff41">[</text>
-  <text x="30" y="130" font-family="monospace" font-size="14" fill="#00ff41">  "score": "{score}",</text>
-  <text x="30" y="150" font-family="monospace" font-size="14" fill="#00ff41">  "solved_challenges": "{solved_challenges}",</text>
-  <text x="30" y="170" font-family="monospace" font-size="14" fill="#00ff41">  "rank": "{scoreboard_position}°",</text>
-  <text x="30" y="190" font-family="monospace" font-size="14" fill="#00ff41">  "best_category": "{best_category}"</text>
+  <text x="30" y="130" font-family="monospace" font-size="14" fill="#00ff41"> "score": "{score}",</text>
+  <text x="30" y="150" font-family="monospace" font-size="14" fill="#00ff41"> "solved_challenges": "{solved_challenges}",</text>
+  <text x="30" y="170" font-family="monospace" font-size="14" fill="#00ff41"> "rank": "{scoreboard_position}°",</text>
+  <text x="30" y="190" font-family="monospace" font-size="14" fill="#00ff41"> "best_category": "{best_category}"</text>
   
   <!-- Code animation (simulated) -->
   <g opacity="0.2">
