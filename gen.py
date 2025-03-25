@@ -51,33 +51,27 @@ def find_best_category(player_data):
 def generate_histogram_svg(categories, template="default"):
     """
     Generate a pie chart SVG representing challenge distribution across categories.
-        return : Base64 encoded SVG of the pie chart
+    return : Base64 encoded SVG of the pie chart
     """
-    # select color palette based on template
     if not categories:
         return ""
+    
     palette = TEMPLATE_COLOR_PALETTES.get(template, TEMPLATE_COLOR_PALETTES["default"])
     title_color, text_color, *chart_colors = palette
-    
 
-    
     plt.figure(figsize=(6, 3), dpi=100)
     plt.style.use('default')
-    
-    
+
     plt.title("Completed Challenges", fontsize=14, color=title_color, fontweight='bold')
-    
-    
+
     category_names = list(categories.keys())
     percentages = list(categories.values())
-    
-    
+
     plt.pie(
         percentages, 
         labels=category_names, 
         colors=chart_colors, 
-        autopct='%1.1f%%', 
-        pctdistance=0.75, 
+        labeldistance=1.1,  # Aumenta la distanza delle etichette per renderle più leggibili
         wedgeprops={
             'edgecolor': 'black', 
             'linewidth': 1, 
@@ -89,15 +83,14 @@ def generate_histogram_svg(categories, template="default"):
             'fontweight': 'bold'
         }
     )
-    
-    
+
     buffer = io.BytesIO()
     plt.savefig(buffer, format='svg', bbox_inches='tight', transparent=True)
     plt.close()
-    
-    # convert to base64
+
     svg_data = buffer.getvalue().decode('utf-8')
     return base64.b64encode(svg_data.encode('utf-8')).decode('utf-8')
+
 
 def main():
 
