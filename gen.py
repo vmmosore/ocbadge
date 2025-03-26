@@ -30,9 +30,9 @@ HEADERS = {
 TEMPLATE_COLOR_PALETTES = {
     "default": ['#6f2fb7', '#b57edc', '#8432e1', '#6f2fb7', '#a365e9', '#5a2c96', '#3d1e64'],
     "hacker":None,
-    "dark":None,
+    "dark":['#4a1c7c', '#6a4c93', '#2c1047', '#4a1c7c', '#6a4c93', '#281847', '#1a1a2e'],
     "darkRed":None,
-    "white":None,
+    "white":['#6a5acd', '#8a7db0', '#d8d8f0', '#6a5acd', '#8a7db0', '#e6e6fa', '#f5f5ff'],
     "oldDefault":None,
 }
 
