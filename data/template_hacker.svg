@@ -22,7 +22,7 @@
   
   <!-- Stats in terminal style -->
   <text x="20" y="90" font-family="monospace" font-size="14" fill="#00ff41">$ cat stats.json</text>
-  <text x="20" y="110" font-family="monospace" font-size="14" fill="#00ff41">[</text>
+  <text x="20" y="110" font-family="monospace" font-size="14" fill="#00ff41">{{</text>
   <text x="30" y="130" font-family="monospace" font-size="14" fill="#00ff41"> "score": "{score}",</text>
   <text x="30" y="150" font-family="monospace" font-size="14" fill="#00ff41"> "solved_challenges": "{solved_challenges}",</text>
   <text x="30" y="170" font-family="monospace" font-size="14" fill="#00ff41"> "rank": "{scoreboard_position}°",</text>
