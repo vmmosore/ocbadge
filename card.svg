@@ -23,7 +23,7 @@
 
   <!-- Username -->
   <text x="48%" y="35" dominant-baseline="middle" text-anchor="middle" font-size="22" font-family="monospace, sans-serif" font-weight="bold" fill="#b57edc" filter="url(#neon)">
-    nick_maro
+    unitythecoder
   </text>
 
   <!-- Horizontal Stats Section -->
@@ -34,7 +34,7 @@
     </svg>
     <text x="25" y="15" font-size="14" font-family="Poppins, sans-serif" font-weight="bold" fill="#6f2fb7">Ranking:</text>
     <text x="120" y="15" font-size="14" font-family="Poppins, sans-serif" font-weight="bold" fill="#8432e1" filter="url(#neon)">
-      506°
+      66°
     </text>
 
     <!-- Score -->
@@ -43,7 +43,7 @@
     </svg>
     <text x="25" y="45" font-size="12" font-family="Poppins, sans-serif" fill="#6f2fb7">Score:</text>
     <text x="120" y="45" font-size="14" font-family="Poppins, sans-serif" font-weight="bold" fill="#8432e1" filter="url(#neon)">
-      31923
+      116606
     </text>
 
     <!-- Solved Challenges -->
@@ -52,7 +52,7 @@
     </svg>
     <text x="25" y="75" font-size="12" font-family="Poppins, sans-serif" fill="#6f2fb7">Solved:</text>
     <text x="120" y="75" font-size="14" font-family="Poppins, sans-serif" font-weight="bold" fill="#8432e1" filter="url(#neon)">
-      94
+      241
     </text>
 
     <!-- Best Category -->
